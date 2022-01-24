@@ -1,0 +1,44 @@
+[2022-01-22 17:57:29,001] {taskinstance.py:670} INFO - Dependencies all met for <TaskInstance: twitter_dag.twitter_sorocaba 2022-01-22T20:56:56.311134+00:00 [queued]>
+[2022-01-22 17:57:29,013] {taskinstance.py:670} INFO - Dependencies all met for <TaskInstance: twitter_dag.twitter_sorocaba 2022-01-22T20:56:56.311134+00:00 [queued]>
+[2022-01-22 17:57:29,013] {taskinstance.py:880} INFO - 
+--------------------------------------------------------------------------------
+[2022-01-22 17:57:29,013] {taskinstance.py:881} INFO - Starting attempt 1 of 1
+[2022-01-22 17:57:29,013] {taskinstance.py:882} INFO - 
+--------------------------------------------------------------------------------
+[2022-01-22 17:57:29,023] {taskinstance.py:901} INFO - Executing <Task(TwitterOperator): twitter_sorocaba> on 2022-01-22T20:56:56.311134+00:00
+[2022-01-22 17:57:29,027] {standard_task_runner.py:54} INFO - Started process 7695 to run task
+[2022-01-22 17:57:29,075] {standard_task_runner.py:77} INFO - Running: ['airflow', 'run', 'twitter_dag', 'twitter_sorocaba', '2022-01-22T20:56:56.311134+00:00', '--job_id', '16', '--pool', 'default_pool', '--raw', '-sd', 'DAGS_FOLDER/twitter_dag.py', '--cfg_path', '/tmp/tmpay9fva6h']
+[2022-01-22 17:57:29,076] {standard_task_runner.py:78} INFO - Job 16: Subtask twitter_sorocaba
+[2022-01-22 17:57:29,095] {logging_mixin.py:112} INFO - Running <TaskInstance: twitter_dag.twitter_sorocaba 2022-01-22T20:56:56.311134+00:00 [running]> on host nicholas-VirtualBox-ubuntu1804
+[2022-01-22 17:57:29,229] {base_hook.py:89} INFO - Using connection to: id: twitter_default. Host: https://api.twitter.com, Port: None, Schema: None, Login: None, Password: None, extra: XXXXXXXX
+[2022-01-22 17:57:29,237] {twitter_hook.py:37} INFO - URL: https://api.twitter.com/2/tweets/search/recent?query=sorocaba&tweet.fields=author_id,conversation_id,created_at,id,in_reply_to_user_id,public_metrics,text&expansions=author_id&user.fields=id,name,username,created_at&start_time=2022-01-22T20:56:56.00Z&end_time=2022-01-22T20:56:56.00Z
+[2022-01-22 17:57:29,929] {http_hook.py:150} ERROR - HTTP error: Bad Request
+[2022-01-22 17:57:29,929] {http_hook.py:151} ERROR - {"errors":[{"parameters":{"start_time":["2022-01-22T20:56Z"],"end_time":["2022-01-22T20:56Z"]},"message":"Invalid 'start_time':'2022-01-22T20:56Z'. 'start_time' must be before 'end_time':2022-01-22T20:56Z"}],"title":"Invalid Request","detail":"One or more parameters to your request was invalid.","type":"https://api.twitter.com/2/problems/invalid-request"}
+[2022-01-22 17:57:29,932] {taskinstance.py:1150} ERROR - 400:Bad Request
+Traceback (most recent call last):
+  File "/home/nicholas/datapipeline/.env/lib/python3.6/site-packages/airflow/hooks/http_hook.py", line 148, in check_response
+    response.raise_for_status()
+  File "/home/nicholas/datapipeline/.env/lib/python3.6/site-packages/requests/models.py", line 941, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 400 Client Error: Bad Request for url: https://api.twitter.com/2/tweets/search/recent?query=sorocaba&tweet.fields=author_id,conversation_id,created_at,id,in_reply_to_user_id,public_metrics,text&expansions=author_id&user.fields=id,name,username,created_at&start_time=2022-01-22T20:56:56.00Z&end_time=2022-01-22T20:56:56.00Z
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/nicholas/datapipeline/.env/lib/python3.6/site-packages/airflow/models/taskinstance.py", line 984, in _run_raw_task
+    result = task_copy.execute(context=context)
+  File "/home/nicholas/datapipeline/airflow/plugins/operators/twitter_operator.py", line 48, in execute
+    for pg in hook.run():
+  File "/home/nicholas/datapipeline/airflow/plugins/hooks/twitter_hook.py", line 54, in run
+    yield from self.paginate(url, session)
+  File "/home/nicholas/datapipeline/airflow/plugins/hooks/twitter_hook.py", line 46, in paginate
+    data = self.connect_to_endpoint(full_url, session)
+  File "/home/nicholas/datapipeline/airflow/plugins/hooks/twitter_hook.py", line 38, in connect_to_endpoint
+    return self.run_and_check(session, prep, {}).json()
+  File "/home/nicholas/datapipeline/.env/lib/python3.6/site-packages/airflow/hooks/http_hook.py", line 181, in run_and_check
+    self.check_response(response)
+  File "/home/nicholas/datapipeline/.env/lib/python3.6/site-packages/airflow/hooks/http_hook.py", line 152, in check_response
+    raise AirflowException(str(response.status_code) + ":" + response.reason)
+airflow.exceptions.AirflowException: 400:Bad Request
+[2022-01-22 17:57:29,950] {taskinstance.py:1194} INFO - Marking task as FAILED. dag_id=twitter_dag, task_id=twitter_sorocaba, execution_date=20220122T205656, start_date=20220122T205729, end_date=20220122T205729
+[2022-01-22 17:57:34,005] {local_task_job.py:102} INFO - Task exited with return code 1
